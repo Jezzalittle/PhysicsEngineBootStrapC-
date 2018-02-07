@@ -29,20 +29,29 @@ bool PhysicsEngineApp::startup() {
 	
 	m_font = new aie::Font("../bin/font/consolas.ttf", 32);
 
-	sceneManager = new SceneManager();
+	sceneManager = std::make_shared<SceneManager>();
 
-	ballDropScene = new PhysicsScene(*sceneManager, 0.5f, { 0,-9.8 });
+	ballDropScene = std::make_unique<PhysicsScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
+	ballThrowScene = std::make_unique<PhysicsScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
+
 
 	Sphere* ProjectileBall; 
 	ProjectileBall = new Sphere(glm::vec2(-40, 0), 1.0f, 1, glm::vec4(1, 0, 0, 1));
 	ProjectileBall->SetVel(glm::vec2(cos(0.785398f), sin(0.785398f)) * 30.0f);
 
-	ballDropScene->addActor(ProjectileBall);
+	ballThrowScene->addActor(ProjectileBall);
 	drawprojectileMotionDemo();
 
 
 
 
+	ballThrowScene->SetClearGizmos(false);
+
+	//ballDropScene = new PhysicsScene(*sceneManager, 0.01f, { 0,-9.8f });
+	
+	Sphere* fallingBall = new Sphere({ 0,0 }, 1, 1, { 0,1,0,1 });
+	ballDropScene->addActor(fallingBall);
+	
 	playerPos = glm::vec2(0, -40);
 
 
@@ -54,7 +63,7 @@ void PhysicsEngineApp::shutdown() {
 
 	delete m_font;
 	delete m_2dRenderer;
-	delete ballDropScene;
+	//delete ballThrowScene;
 }
 
 void PhysicsEngineApp::update(float deltaTime) {

@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Renderer2D.h"
 #include <glm\ext.hpp>
+#include <memory>
 
 class SceneManager;
 class PhysicsScene;
@@ -23,13 +24,13 @@ protected:
 
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Font*			m_font;
-	PhysicsScene*		ballDropScene;
-	PhysicsScene*		projectileMotionScene;
-	PhysicsScene*		currentScene;
-	SceneManager*		sceneManager;
+	std::unique_ptr<PhysicsScene>		ballThrowScene;
+	std::unique_ptr<PhysicsScene>		ballDropScene;
+	std::shared_ptr<SceneManager>		sceneManager;
 
 
 private:
+
 
 	void drawprojectileMotionDemo();
 	void drawBreakOut();

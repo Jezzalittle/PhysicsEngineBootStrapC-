@@ -5,15 +5,18 @@
 #include "SceneManager.h"
 
 
-PhysicsScene::PhysicsScene(SceneManager& sceneManager, float a_tiemStep, glm::vec2 a_gravity)
+PhysicsScene::PhysicsScene(std::shared_ptr<class SceneManager> sceneManager, float a_tiemStep, glm::vec2 a_gravity)
 {
-	sceneManager.AddScene(this);
+	m_sceneManager = sceneManager;
+
+	m_sceneManager->AddScene(this);
 	timeStep = a_tiemStep;
 	gravity = a_gravity;
 }
 
 PhysicsScene::~PhysicsScene()
 {
+	//m_sceneManager->
 	for (auto& actor : actors)
 	{
 		delete actor;
@@ -52,8 +55,10 @@ void PhysicsScene::update(float dt)
 
 void PhysicsScene::updateGizmos()
 {
-	aie::Gizmos::clear();
-
+	if (clearGizmos)
+	{
+		aie::Gizmos::clear();
+	}
 	for (auto pActor : actors)
 	{
 		pActor->makeGizmo();
