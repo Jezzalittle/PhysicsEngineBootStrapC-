@@ -51,7 +51,9 @@ void SceneManager::NextScene()
 {
 	if (sceneIndex + 1 < scenes.size())
 	{
-		for (auto i : currentScene[sceneIndex].GetActors())
+
+		auto actors = scenes[sceneIndex]->GetActors();
+		for (auto i : actors)
 		{
 			i->resetPos();
 		}
@@ -64,10 +66,12 @@ void SceneManager::PreviousScene()
 {
 	if (sceneIndex - 1 >= 0)
 	{
-		for (auto i : (currentScene[sceneIndex].GetActors()))
+		auto actors = scenes[sceneIndex]->GetActors();
+		for (auto i : actors)
 		{
 			i->resetPos();
 		}
+
 		sceneIndex--;
 		currentScene = scenes[sceneIndex];
 	}
