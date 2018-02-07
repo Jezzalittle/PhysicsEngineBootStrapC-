@@ -25,7 +25,7 @@ public:
 	float getTimeStep() const { return timeStep;  }
 
 	void SetClearGizmos(bool a_clearGizmo) { clearGizmos = a_clearGizmo; }
-
+	std::vector<PhysicsObject*> GetActors() { return actors;  }
 
 protected:
 	
@@ -34,8 +34,8 @@ protected:
 	std::vector<PhysicsObject*> actors;
 
 	std::shared_ptr<class SceneManager> m_sceneManager;
-private:
 
+private:
 
 	bool clearGizmos;
 

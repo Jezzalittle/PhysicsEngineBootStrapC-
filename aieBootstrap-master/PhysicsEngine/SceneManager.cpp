@@ -1,5 +1,5 @@
 #include "SceneManager.h"
-
+#include "RigidBody.h"
 
 
 SceneManager::SceneManager(PhysicsScene * a_startScene)
@@ -39,12 +39,11 @@ void SceneManager::AddScene(PhysicsScene * a_scene)
 {
 	if (a_scene != nullptr)
 	{
-		if (sceneIndex == 0)
+		if (scenes.size() == 0)
 		{
 			currentScene = a_scene;
 		}
 		scenes.push_back(a_scene);
-		sceneIndex++;
 	}
 }
 
@@ -52,6 +51,10 @@ void SceneManager::NextScene()
 {
 	if (sceneIndex + 1 < scenes.size())
 	{
+		for (auto i : currentScene[sceneIndex].GetActors())
+		{
+			i->resetPos();
+		}
 		sceneIndex++;
 		currentScene = scenes[sceneIndex];
 	}
@@ -61,6 +64,10 @@ void SceneManager::PreviousScene()
 {
 	if (sceneIndex - 1 >= 0)
 	{
+		for (auto i : (currentScene[sceneIndex].GetActors()))
+		{
+			i->resetPos();
+		}
 		sceneIndex--;
 		currentScene = scenes[sceneIndex];
 	}

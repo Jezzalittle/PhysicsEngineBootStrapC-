@@ -28,6 +28,11 @@ void RigidBody::fixedUpdate(glm::vec2 gravity, float timeStep)
 	acc = { 0,0 };
 }
 
+void RigidBody::resetPos()
+{
+	pos = ogPos;
+}
+
 void RigidBody::applyForce(glm::vec2 a_force)
 {
 

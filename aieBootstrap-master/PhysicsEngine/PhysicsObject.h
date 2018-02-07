@@ -27,6 +27,9 @@ protected:
 
 	PhysicsObject(ShapeType a_Shape) : shape(a_Shape) {}
 	ShapeType shape;
+	float ogPos;
+	
+
 	
 };
 

@@ -18,6 +18,8 @@ x64/
 x86/
 bld/
 [Oo]bj/
+x64/*
+!x64/glfw3.lib
 
 # Visual Studio 2015 cache/options directory
 .vs/

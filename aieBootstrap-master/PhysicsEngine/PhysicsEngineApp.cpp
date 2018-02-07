@@ -74,7 +74,7 @@ void PhysicsEngineApp::update(float deltaTime) {
 
 
 	sceneManager->UpdateScene(deltaTime);
-	if (input->isKeyDown(aie::INPUT_KEY_LEFT))
+	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
 	{
 		sceneManager->NextScene();
 	}
