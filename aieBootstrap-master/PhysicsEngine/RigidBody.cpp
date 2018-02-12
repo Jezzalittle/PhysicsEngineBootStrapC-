@@ -1,4 +1,5 @@
 #include "RigidBody.h"
+#include <Gizmos.h>
 
 
 
@@ -12,6 +13,8 @@ RigidBody::RigidBody(ShapeType a_shape, glm::vec2 a_pos, float a_rot, float a_ma
 	rot = a_rot;
 	mass = a_mass;
 	acc = { 0, 0 };
+	initialVel = vel;
+	firstFixedUpdate = true;
 }
 
 RigidBody::~RigidBody()
@@ -24,6 +27,11 @@ void RigidBody::fixedUpdate(glm::vec2 gravity, float timeStep)
 	vel += acc * timeStep;
 	pos += vel * timeStep;
 
+	if (firstFixedUpdate)
+	{
+		initialVel = vel;
+		firstFixedUpdate = false;
+	}
 
 	acc = { 0,0 };
 }
@@ -31,6 +39,8 @@ void RigidBody::fixedUpdate(glm::vec2 gravity, float timeStep)
 void RigidBody::resetPos()
 {
 	pos = ogPos;
+	vel = initialVel;
+	aie::Gizmos::clear();
 }
 
 void RigidBody::applyForce(glm::vec2 a_force)

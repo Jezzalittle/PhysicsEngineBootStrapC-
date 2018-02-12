@@ -32,7 +32,6 @@ protected:
 private:
 
 
-	void drawprojectileMotionDemo();
-	void drawBreakOut();
+
 	glm::vec2 playerPos;
 };

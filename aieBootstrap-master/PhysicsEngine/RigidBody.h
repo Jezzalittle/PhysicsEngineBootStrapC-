@@ -35,6 +35,8 @@ protected:
 	float rot;
 	float mass;
 	glm::vec2 ogPos;
+	glm::vec2 initialVel;
+	bool firstFixedUpdate;
 
 };
 

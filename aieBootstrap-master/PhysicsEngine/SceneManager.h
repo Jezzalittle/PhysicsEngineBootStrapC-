@@ -12,6 +12,7 @@ private:
 	PhysicsScene * currentScene;
 	std::vector<PhysicsScene*> scenes;
 	int sceneIndex;
+	bool firstUpdate;
 	
 public:
 	SceneManager(PhysicsScene* startScene);
@@ -27,10 +28,12 @@ public:
 	void NextScene();
 
 	void PreviousScene();
+
 	
 	int getSceneIndex() { return sceneIndex; };
 
 
+	void drawprojectileMotionDemo();
 
 
 

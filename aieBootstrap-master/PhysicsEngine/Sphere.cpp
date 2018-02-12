@@ -13,6 +13,7 @@ Sphere::Sphere(const glm::vec2 pos, float a_radius, float  mass, const glm::vec4
 
 Sphere::~Sphere()
 {
+
 }
 
 void Sphere::makeGizmo()

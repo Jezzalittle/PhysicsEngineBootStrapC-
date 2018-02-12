@@ -12,11 +12,22 @@ public:
 	PhysicsScene() = delete;
 	~PhysicsScene();
 
+	void CheckForCollision();
+
+	static bool Plane2Sphere(PhysicsObject*, PhysicsObject*);
+
+	static bool Sphere2Plane(PhysicsObject*, PhysicsObject*);
+
+	static bool Sphere2Sphere(PhysicsObject*, PhysicsObject*);
+
 
 	void addActor(PhysicsObject* actor);
 	void removeActor(PhysicsObject* actor);
 	void update(float dt);
 	void updateGizmos();
+
+	virtual void Start() = 0;
+	virtual void CleanUp() = 0;
 
 	void setGravity(const glm::vec2 a_gravity) { gravity = a_gravity; }
 	glm::vec2 getGravity() const { return gravity;  }
@@ -29,6 +40,8 @@ public:
 
 protected:
 	
+	
+
 	glm::vec2 gravity;
 	float timeStep;
 	std::vector<PhysicsObject*> actors;

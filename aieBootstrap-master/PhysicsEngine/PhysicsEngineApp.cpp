@@ -1,13 +1,14 @@
 #include <math.h>
 #define _USE_MATH_DEFINES
 #include "PhysicsEngineApp.h"
-#include "PhysicsScene.h"
 #include "Texture.h"
 #include "Font.h"
 #include "Input.h"
 #include <Gizmos.h>
 #include "Sphere.h"
 #include "SceneManager.h"
+#include "BallDropScene.h"
+#include "BallThrowScene.h"
 
 
 PhysicsEngineApp::PhysicsEngineApp() {
@@ -31,29 +32,8 @@ bool PhysicsEngineApp::startup() {
 
 	sceneManager = std::make_shared<SceneManager>();
 
-	ballDropScene = std::make_unique<PhysicsScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
-	ballThrowScene = std::make_unique<PhysicsScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
-
-
-	Sphere* ProjectileBall; 
-	ProjectileBall = new Sphere(glm::vec2(-40, 0), 1.0f, 1, glm::vec4(1, 0, 0, 1));
-	ProjectileBall->SetVel(glm::vec2(cos(0.785398f), sin(0.785398f)) * 30.0f);
-
-	ballThrowScene->addActor(ProjectileBall);
-	drawprojectileMotionDemo();
-
-
-
-
-	ballThrowScene->SetClearGizmos(false);
-
-	//ballDropScene = new PhysicsScene(*sceneManager, 0.01f, { 0,-9.8f });
-	
-	Sphere* fallingBall = new Sphere({ 0,0 }, 1, 1, { 0,1,0,1 });
-	ballDropScene->addActor(fallingBall);
-	
-	playerPos = glm::vec2(0, -40);
-
+	ballDropScene = std::make_unique<BallDropScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
+	ballThrowScene = std::make_unique<BallThrowScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
 
 
 	return true;
@@ -102,88 +82,10 @@ void PhysicsEngineApp::draw() {
 	aie::Gizmos::draw2D(glm::ortho<float>(-100.0f, 100.0f, -100.0f / aspectRatio, 100.0f / aspectRatio, -1.0f, 1.0f));
 
 	// output some text, uses the last used colour
-	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0, 0);
+	m_2dRenderer->drawText(m_font, "Press ESC to quit", 0.5f, 8.0f);
 
 	// done drawing sprites
 	m_2dRenderer->end();
 }
 
 
-
-void PhysicsEngineApp::drawprojectileMotionDemo()
-{
-
-	float t = 0;
-	float tStep = 0.5f;
-	float radius = 1.0f;
-	glm::vec2 startPos = { -40,0 };
-	int segments = 12;
-	glm::vec4 colour = glm::vec4(1, 1, 0, 1);
-	float speed = 20;
-	float incline = 45;
-	float gravity = -9.8f;
-
-	while (t <= 5)
-	{
-
-		glm::vec2 currPos;
-
-		currPos.x = startPos.x + (speed * t);
-		currPos.y = startPos.y + (speed * t) + (0.5 * gravity * (t*t));
-
-		aie::Gizmos::add2DCircle(glm::vec2(currPos.x, currPos.y), radius, segments, colour);
-		t += tStep;
-	}
-
-}
-
-void PhysicsEngineApp::drawBreakOut()
-{
-	aie::Input* input = aie::Input::getInstance();
-	if (input->isKeyDown(aie::INPUT_KEY_LEFT))
-	{
-		playerPos.x--;
-	}
-
-	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
-	{
-		playerPos.x++;
-	}
-
-	static const glm::vec4 blockColors[] = {
-		glm::vec4(1,0,0,1), glm::vec4(0,1,0,1), glm::vec4(0,0,1,1), glm::vec4(0.8f,0,0.5f,1), glm::vec4(0,1,1,1)
-	};
-
-	static const int rows = 5;
-	static const int columns = 10;
-	static const int hSpace = 1;
-	static const int vSpace = 1;
-
-	static const glm::vec2 scrExtents(100, 50);
-	static const glm::vec2 boxExtents(7, 3);
-	static const glm::vec2 startPos(-(columns >> 1)*((boxExtents.x * 2) + vSpace) + boxExtents.x + (vSpace / 2.0f), scrExtents.y - ((boxExtents.y * 2) + hSpace));
-
-
-	//draw the grid of blocks
-	glm::vec2 pos;
-	for (int y = 0; y < rows; y++)
-	{
-		pos = glm::vec2(startPos.x, startPos.y - (y* ((boxExtents.y * 2) + hSpace)));
-		for (int x = 0; x < columns; x++)
-		{
-			aie::Gizmos::add2DAABBFilled(pos, boxExtents, blockColors[y]);
-			pos.x += (boxExtents.x * 2) + vSpace;
-		}
-	}
-
-
-
-
-
-	//ball
-	aie::Gizmos::add2DCircle(glm::vec2(0, -35), 3, 12, glm::vec4(1, 1, 0, 1));
-
-	//player
-	aie::Gizmos::add2DAABBFilled(playerPos, glm::vec2(12, 2), glm::vec4(1, 0, 1, 1));
-
-}
