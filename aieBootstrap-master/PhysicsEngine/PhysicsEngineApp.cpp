@@ -9,7 +9,7 @@
 #include "SceneManager.h"
 #include "BallDropScene.h"
 #include "BallThrowScene.h"
-
+#include "CollisionTestScene.h"
 
 PhysicsEngineApp::PhysicsEngineApp() {
 
@@ -34,7 +34,7 @@ bool PhysicsEngineApp::startup() {
 
 	ballDropScene = std::make_unique<BallDropScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
 	ballThrowScene = std::make_unique<BallThrowScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
-
+	collisionScene = std::make_unique<CollisionTestScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
 
 	return true;
 }
@@ -54,12 +54,12 @@ void PhysicsEngineApp::update(float deltaTime) {
 
 
 	sceneManager->UpdateScene(deltaTime);
-	if (input->isKeyDown(aie::INPUT_KEY_RIGHT))
+	if (input->wasKeyPressed(aie::INPUT_KEY_RIGHT))
 	{
 		sceneManager->NextScene();
 	}
 	
-	if (input->isKeyDown(aie::INPUT_KEY_LEFT))
+	if (input->wasKeyPressed(aie::INPUT_KEY_LEFT))
 	{
 		sceneManager->PreviousScene();
 	}

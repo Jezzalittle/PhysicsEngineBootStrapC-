@@ -12,7 +12,7 @@ public:
 	virtual void makeGizmo();
 	
 
-	
+	float GetRadius() { return radius; }
 
 
 

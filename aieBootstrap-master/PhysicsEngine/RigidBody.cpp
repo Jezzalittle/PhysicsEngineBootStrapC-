@@ -23,7 +23,7 @@ RigidBody::~RigidBody()
 
 void RigidBody::fixedUpdate(glm::vec2 gravity, float timeStep)
 {
-	applyForce(gravity * mass);
+	applyForce(gravity * mass, Physics::Impulse);
 	vel += acc * timeStep;
 	pos += vel * timeStep;
 
@@ -43,10 +43,26 @@ void RigidBody::resetPos()
 	aie::Gizmos::clear();
 }
 
-void RigidBody::applyForce(glm::vec2 a_force)
+void RigidBody::applyForce(glm::vec2 a_force, Physics::ForceMode a_forceMode)
 {
+	switch (a_forceMode)
+	{
+	case Physics::Force:
+		acc += (a_force / mass);
+	case Physics::Acceleration:
+		acc += a_force;
+	case Physics::Impulse:
+		vel += (a_force / mass);
+		break;
+	case Physics::VelocityChange:
+		vel += a_force;
+		break;
+	default:
+		assert(false);
+		break;
+	}
 
-	acc += (a_force / mass);
+
 
 }
 

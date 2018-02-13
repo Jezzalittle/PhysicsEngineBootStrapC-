@@ -5,20 +5,43 @@
 
 class PhysicsObject;
 
+
 class PhysicsScene
 {
+
+
 public:
+
+	struct  CollisionData
+	{
+		bool wasCollision;
+		glm::vec2 normal;
+		float overlap;
+	};
+
 	PhysicsScene(std::shared_ptr<class SceneManager> sceneManager, float a_tiemStep, glm::vec2 a_gravity);
 	PhysicsScene() = delete;
 	~PhysicsScene();
 
 	void CheckForCollision();
 
-	static bool Plane2Sphere(PhysicsObject*, PhysicsObject*);
+	static CollisionData Plane2Sphere(PhysicsObject* object1, PhysicsObject*object2);
 
-	static bool Sphere2Plane(PhysicsObject*, PhysicsObject*);
+	static CollisionData Sphere2Plane(PhysicsObject* object1, PhysicsObject* object2);
 
-	static bool Sphere2Sphere(PhysicsObject*, PhysicsObject*);
+	static CollisionData Sphere2Sphere(PhysicsObject* object1, PhysicsObject* object2);
+
+	static CollisionData Sphere2Box(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	static CollisionData Box2Plane(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	static CollisionData Box2Sphere(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	static CollisionData Box2Box(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	static CollisionData Plane2Box(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	
+
+
+	void handleCollision(PhysicsObject* object1, PhysicsObject* object2, const CollisionData& data);
+
+	void SeperateCollisionObjects(class RigidBody * object1, class RigidBody * object2, const PhysicsScene::CollisionData & collData);
 
 
 	void addActor(PhysicsObject* actor);
@@ -51,6 +74,7 @@ protected:
 private:
 
 	bool clearGizmos;
+
 
 };
 

@@ -6,18 +6,21 @@
 
 #include "PhysicsScene.h"
 
+enum ShapeType
+{
+	SPHERE = 0,
+	PLANE,
+	BOX,
+	SHAPECOUNT
+};
+
+
 class PhysicsObject
 {
 
 public:
 
-enum class ShapeType
-{
-	Sphere = 0,
-	Plane,
-	Box,
-	num_Shape
-};
+
 
 
 
