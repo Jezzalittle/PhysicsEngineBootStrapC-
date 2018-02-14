@@ -124,8 +124,9 @@ PhysicsScene::CollisionData PhysicsScene::Sphere2Sphere(PhysicsObject *object1, 
 PhysicsScene::CollisionData PhysicsScene::Sphere2Box(PhysicsObject * object1, PhysicsObject * object2)
 {
 
+	Sphere *sphere1 = dynamic_cast<Sphere*>(object1);
+	Box *sphere2 = dynamic_cast<Sphere*>(object2);
 	
-
 
 	//CollisionData colldata;
 	//// First, compute the distance between the centers 
