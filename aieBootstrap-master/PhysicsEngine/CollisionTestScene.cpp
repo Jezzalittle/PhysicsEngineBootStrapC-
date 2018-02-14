@@ -5,10 +5,10 @@
 
 void CollisionTestScene::Start()
 {
-	fallingBall = new Sphere({ 0,0 }, 3, 5, { 0,1,0,1 });
+	fallingBall = new Sphere({ -2,0 }, 3, 5, { 0,1,0,1 });
+	ballInitalVel = new Sphere({ 2,-30 }, 3, 5, { 1,0,0,1 });
 	staticPlane = new Plane({0,1}, 50.0f);
 	
-	ballInitalVel = new Sphere({ 0,-30 }, 3, 5, { 1,0,0,1 });
 
 	ballInitalVel->SetVel({ 0,30 });
 

@@ -32,9 +32,9 @@ bool PhysicsEngineApp::startup() {
 
 	sceneManager = std::make_shared<SceneManager>();
 
-	ballDropScene = std::make_unique<BallDropScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
-	ballThrowScene = std::make_unique<BallThrowScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
-	collisionScene = std::make_unique<CollisionTestScene>(sceneManager, 0.016f, glm::vec2{ 0, -9.8f });
+	ballDropScene = std::make_unique<BallDropScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
+	ballThrowScene = std::make_unique<BallThrowScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
+	collisionScene = std::make_unique<CollisionTestScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
 
 	return true;
 }

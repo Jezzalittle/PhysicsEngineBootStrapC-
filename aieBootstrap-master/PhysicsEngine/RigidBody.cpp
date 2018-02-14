@@ -1,6 +1,6 @@
 #include "RigidBody.h"
 #include <Gizmos.h>
-
+#include <iostream>
 
 
 
@@ -23,7 +23,7 @@ RigidBody::~RigidBody()
 
 void RigidBody::fixedUpdate(glm::vec2 gravity, float timeStep)
 {
-	applyForce(gravity * mass, Physics::Impulse);
+	applyForce(gravity, Physics::Acceleration);
 	vel += acc * timeStep;
 	pos += vel * timeStep;
 
@@ -49,8 +49,10 @@ void RigidBody::applyForce(glm::vec2 a_force, Physics::ForceMode a_forceMode)
 	{
 	case Physics::Force:
 		acc += (a_force / mass);
+		break;
 	case Physics::Acceleration:
 		acc += a_force;
+		break;
 	case Physics::Impulse:
 		vel += (a_force / mass);
 		break;
@@ -68,6 +70,6 @@ void RigidBody::applyForce(glm::vec2 a_force, Physics::ForceMode a_forceMode)
 
 void RigidBody::applyForceToActor(RigidBody * other, glm::vec2 force)
 {
-	other->applyForce(force);
-	applyForce(-force);
+	other->applyForce(force, Physics::Impulse);
+	applyForce(-force, Physics::Impulse);
 }
