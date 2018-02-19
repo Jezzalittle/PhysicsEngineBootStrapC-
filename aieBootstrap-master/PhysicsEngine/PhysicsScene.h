@@ -32,8 +32,8 @@ public:
 	static CollisionData Sphere2Sphere(PhysicsObject* object1, PhysicsObject* object2);
 
 	static CollisionData Sphere2Box(PhysicsObject* object1, PhysicsObject* object2);
-	static CollisionData Box2Plane(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
-	static CollisionData Box2Sphere(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
+	static CollisionData Box2Plane(PhysicsObject* object1, PhysicsObject* object2);
+	static CollisionData Box2Sphere(PhysicsObject* object1, PhysicsObject* object2);
 	static CollisionData Box2Box(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
 	static CollisionData Plane2Box(PhysicsObject* object1, PhysicsObject* object2) { return CollisionData(); }
 	

@@ -3,6 +3,7 @@
 
 class Sphere;
 class Plane;
+class AABB;
 
 class CollisionTestScene :	public PhysicsScene
 {
@@ -21,7 +22,7 @@ private:
 
 	Sphere* fallingBall;
 	Plane* staticPlane;
-
+	AABB* box1;
 	Sphere* ballInitalVel;
 
 

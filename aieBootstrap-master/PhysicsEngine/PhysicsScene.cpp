@@ -6,6 +6,7 @@
 #include "Plane.h"
 #include "Sphere.h"
 #include <iostream>
+#include "AABB.h"
 
 PhysicsScene::PhysicsScene(std::shared_ptr<class SceneManager> sceneManager, float a_tiemStep, glm::vec2 a_gravity)
 {
@@ -29,8 +30,10 @@ typedef PhysicsScene::CollisionData(*fn)(PhysicsObject*, PhysicsObject*);
 
 static fn collisionFuctionArray[] =
 {
-	PhysicsScene::Sphere2Sphere, PhysicsScene::Plane2Sphere, PhysicsScene::Plane2Box,
-	PhysicsScene::Sphere2Plane, PhysicsScene::Box2Box,
+	PhysicsScene::Sphere2Sphere,	PhysicsScene::Sphere2Plane,		PhysicsScene::Sphere2Box,		
+	PhysicsScene::Plane2Sphere,		nullptr,						PhysicsScene::Plane2Box,		
+	PhysicsScene::Box2Sphere,		PhysicsScene::Box2Plane,		PhysicsScene::Box2Box,			
+					
 };
 
 void PhysicsScene::CheckForCollision()
@@ -67,8 +70,8 @@ PhysicsScene::CollisionData PhysicsScene::Plane2Sphere(PhysicsObject *object1, P
 {
 
 	CollisionData collData;
-	Plane* plane = dynamic_cast<Plane*>(object2);
-	Sphere* sphere = dynamic_cast<Sphere*>(object1);
+	Plane* plane = dynamic_cast<Plane*>(object1);
+	Sphere* sphere = dynamic_cast<Sphere*>(object2);
 	assert(plane && sphere);
 	collData.normal = plane->GetNormal();
 	float SphereToPlane = glm::dot(sphere->getPos(), plane->GetNormal()) + plane->GetDistanceToOrigin();
@@ -112,9 +115,8 @@ PhysicsScene::CollisionData PhysicsScene::Sphere2Sphere(PhysicsObject *object1, 
 
 	if (colldata.overlap < 0)
 	{
-		colldata.overlap = -colldata.overlap;
 		colldata.wasCollision = true;
-		colldata.normal = glm::normalize(sphere2->getPos() - sphere1->getPos());
+		colldata.normal = glm::normalize(sphere1->getPos() - sphere2->getPos());
 		std::cout << "sphere Collision\n";
 	}
 
@@ -123,40 +125,112 @@ PhysicsScene::CollisionData PhysicsScene::Sphere2Sphere(PhysicsObject *object1, 
 
 PhysicsScene::CollisionData PhysicsScene::Sphere2Box(PhysicsObject * object1, PhysicsObject * object2)
 {
+	CollisionData colldata;
+	colldata.normal = { 0,0 };
+	colldata.overlap = 0.0f;
+	colldata.wasCollision = false;
 
-	Sphere *sphere1 = dynamic_cast<Sphere*>(object1);
-	Box *sphere2 = dynamic_cast<Sphere*>(object2);
+	Sphere *sphere = dynamic_cast<Sphere*>(object1);
+	AABB *box = dynamic_cast<AABB*>(object2);
+
+	glm::vec2 vecBetween = sphere->getPos() - box->getPos();
 	
+	glm::vec2 offset;
 
-	//CollisionData colldata;
-	//// First, compute the distance between the centers 
-	//vec2 SepAxis = Sphere.Center - AABB.Center;
-	//float Dist = Vec3Length(SepAxis);
+	offset.x = glm::dot(vecBetween, { 1,0 });
+	offset.y = glm::dot(vecBetween, { 0,1 });
 
-	//// then, find the unit vector that points from the box center to the sphere center
-	//Vec3Normalize(SepAxis);
+	if (glm::abs(offset.x) > box->getWidth())
+	{
+		(offset.x > 0) ? offset.x = box->getPos().x + box->getWidth() / 2 : offset.x = box->getPos().x - box->getWidth() / 2;
+	}
+	if (glm::abs(offset.y) > box->getHeight())
+	{
+		(offset.y > 0) ? offset.y = box->getPos().y + box->getHeight() / 2 : offset.y = box->getPos().y - box->getHeight() / 2;
+	}
 
-	//// divide each component of the unit vector by the maximum component, effectively "normalizing" the unit vector
-	//if (SepAxis.x >= SepAxis.y && SepAxis.x >= SepAxis.z)
-	//	SepAxis /= SepAxis.x;
-	//else if (SepAxis.y >= SepAxis.x && SepAxis.y >= SepAxis.z)
-	//	SepAxis /= SepAxis.y;
-	//else
-	//	SepAxis /= SepAxis.z;
+	offset += box->getPos();
 
-	//// Now, find the effective radius of the box along the "normalized" unit vector pointing to the sphere
-	//SepAxis.x *= Box.GetWidth() / 2.0f;
-	//SepAxis.y *= Box.GetHeight() / 2.0f;
-	//SepAxis.z *= Box.GetLength() / 2.0f;
+	glm::vec2 vecBetweenClamp = sphere->getPos() - offset;
 
-	//// Finally, add the sphere radius to the box radius and compare to the distance
-	//if (Dist <= (Sphere.Radius + Vec3Length(SepAxis))
-	//	Collision true!
-	//else
-	//	Collision false
+	if (glm::distance(sphere->getPos(), offset) < sphere->GetRadius())
+	{
+		colldata.wasCollision = true;
+		colldata.overlap = glm::distance(sphere->getPos(), offset) - sphere->GetRadius();
+		colldata.normal = glm::normalize(vecBetweenClamp);
+	}
+	
+	return colldata;
 
-	//return CollisionData();
 }
+
+PhysicsScene::CollisionData PhysicsScene::Box2Plane(PhysicsObject * object1, PhysicsObject * object2)
+{
+	CollisionData colldata;
+	colldata.normal = { 0,0 };
+	colldata.overlap = 0.0f;
+	colldata.wasCollision = false;
+
+	AABB *box = dynamic_cast<AABB*>(object1);
+	Plane *plane = dynamic_cast<Plane*>(object2);
+
+	glm::vec2 closestVec;
+
+	auto tlDistance = glm::dot(box->GetTL(), plane->GetNormal()) + plane->GetDistanceToOrigin();
+	auto trDistance = glm::dot(box->GetTR(), plane->GetNormal()) + plane->GetDistanceToOrigin();
+	auto blDistance = glm::dot(box->GetBL(), plane->GetNormal()) + plane->GetDistanceToOrigin();
+	auto brDistance = glm::dot(box->GetBR(), plane->GetNormal()) + plane->GetDistanceToOrigin();
+
+
+
+	float closestDistance = tlDistance;
+	float currentDistance = trDistance;
+
+
+
+	if (currentDistance < closestDistance)
+	{
+		closestDistance = currentDistance;
+		closestVec = box->GetTR();
+	}
+
+	currentDistance = blDistance;
+
+
+	if (currentDistance < closestDistance)
+	{
+		closestDistance = currentDistance;
+		closestVec = box->GetBL();
+	}
+
+
+	currentDistance = brDistance;
+
+
+	if (currentDistance < closestDistance)
+	{
+		closestDistance = currentDistance;
+		closestVec = box->GetBR();
+	}
+
+	//glm::vec2 vecBetween = closestVec - plane->GetNormal() * plane->GetDistanceToOrigin();
+
+	if (closestDistance < 0)
+	{
+		colldata.wasCollision = true;
+		colldata.normal = plane->GetNormal();
+		colldata.overlap = closestDistance;
+	}
+
+
+	return colldata;
+}
+
+PhysicsScene::CollisionData PhysicsScene::Box2Sphere(PhysicsObject * object1, PhysicsObject * object2)
+{
+	return Sphere2Box(object2, object1);
+}
+
 
 void PhysicsScene::handleCollision(PhysicsObject * object1, PhysicsObject * object2, const CollisionData & collData)
 {
@@ -186,7 +260,7 @@ void PhysicsScene::handleCollision(PhysicsObject * object1, PhysicsObject * obje
 	if (rb2)
 	{
 		glm::vec2 newVelocity = (j / rb2->getMass()) * collData.normal;
-		rb1->applyForce(newVelocity, Physics::VelocityChange);
+		rb2->applyForce(-newVelocity, Physics::VelocityChange);
 	}
 
 
@@ -225,7 +299,7 @@ void PhysicsScene::SeperateCollisionObjects(RigidBody * rb1, RigidBody * rb2, co
 	}
 	if (rb2)
 	{
-		rb2->SetPos(rb2->getPos() - (obj2MoveRatio * collData.overlap * collData.normal));
+		rb2->SetPos(rb2->getPos() + (obj2MoveRatio * collData.overlap * collData.normal));
 	}
 }
 
