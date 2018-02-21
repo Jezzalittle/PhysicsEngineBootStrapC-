@@ -22,6 +22,8 @@ private:
 
 	Sphere* fallingBall;
 	Plane* staticPlane;
+	Plane* staticPlane2;
+	AABB* box2;
 	AABB* box1;
 	Sphere* ballInitalVel;
 
