@@ -17,32 +17,32 @@ public:
 	glm::vec2 GetTL() 
 	{
 		glm::vec2 tl;
-		tl.x = pos.x - (0.5f * extents.x);
-		tl.y = pos.y + (0.5f * extents.y);
+		tl.x = pos.x - extents.x;
+		tl.y = pos.y + extents.y;
 		return tl;
 	}
 
 	glm::vec2 GetTR() 
 	{
 		glm::vec2 tr;
-		tr.x = pos.x + (0.5f * extents.x);
-		tr.y = pos.y + (0.5f * extents.y);
+		tr.x = pos.x + extents.x;
+		tr.y = pos.y + extents.y;
 		return tr;
 	}
 
 	glm::vec2 GetBL() 
 	{
 		glm::vec2 bl;
-		bl.x = pos.x - (0.5f * extents.x);
-		bl.y = pos.y - (0.5f * extents.y);
+		bl.x = pos.x - extents.x;
+		bl.y = pos.y - extents.y;
 		return bl;
 	}
 
 	glm::vec2 GetBR() 
 	{
 		glm::vec2 br;
-		br.x = pos.x + (0.5f * extents.x);
-		br.y = pos.y - (0.5f * extents.y);
+		br.x = pos.x + extents.x;
+		br.y = pos.y - extents.y;
 		return br;
 	}
 	

@@ -20,13 +20,20 @@ public:
 
 private:
 
-	Sphere* fallingBall;
-	Plane* staticPlane;
-	Plane* staticPlane2;
-	AABB* box2;
-	AABB* box1;
-	Sphere* ballInitalVel;
+	Sphere* ball1;
+	Sphere* ball2;
+	Sphere* ball3;
+	Sphere* ball4;
 
+	Plane* plane1;
+	Plane* plane2;
+	Plane* plane3;
+	Plane* plane4;
+	Plane* plane5;
+
+	AABB* box1;
+	AABB* box2;
+	AABB* box3;
 
 };
 

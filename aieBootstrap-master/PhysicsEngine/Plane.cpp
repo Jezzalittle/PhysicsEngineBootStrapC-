@@ -4,7 +4,7 @@
 
 Plane::Plane(glm::vec2 a_normal, float a_distance) : PhysicsObject(PLANE)
 {
-	normal = a_normal;
+	normal = glm::normalize(a_normal);
 	distanceToOrigin = a_distance;
 }
 

@@ -32,7 +32,5 @@ protected:
 
 private:
 
-
-
 	glm::vec2 playerPos;
 };

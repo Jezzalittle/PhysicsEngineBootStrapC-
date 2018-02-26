@@ -253,13 +253,18 @@ PhysicsScene::CollisionData PhysicsScene::Box2Box(PhysicsObject * object1, Physi
 	float offsetFaceDis;
 
 
+	//if both boxs are not null ptr
 	if (box1 != nullptr && box2 != nullptr)
 	{
-		if ((box1->getPos().x - box2->getPos().x) > (box1->getWidth() + box2->getWidth()))
+
+		//checks to see the right and left side for both boxes
+		if (abs(box1->getPos().x - box2->getPos().x) > box1->getWidth() + box2->getWidth())
 		{
 			return colldata;
 		}
-		if ((box1->getPos().y - box2->getPos().y) > (box1->getHeight()+ box2->getHeight()))
+
+		//checks to see the top and bottom side for both boxes
+		if (abs(box1->getPos().y - box2->getPos().y) > box1->getHeight()+ box2->getHeight())
 		{
 			return colldata;
 		}
@@ -268,19 +273,45 @@ PhysicsScene::CollisionData PhysicsScene::Box2Box(PhysicsObject * object1, Physi
 		offsetFaceDis = 0.0f;
 
 
-		float overlap1 = glm::length(box1->GetTR() - box2->GetBL());
-		float overlap2 = glm::length(box1->GetBL() - box2->GetTR());
+		glm::vec2 xOverlap1 = { box1->GetTR().x - box2->GetBL().x, 0.0f };
+		glm::vec2 xOverlap2 = { box1->GetBL().x - box2->GetTR().x, 0.0f };
 
-		float collisionOverlap;
-		if (glm::abs(overlap1) < glm::abs(overlap2))
+		glm::vec2 yOverlap1 = { 0.0f , box1->GetTR().y - box2->GetBL().y };
+		glm::vec2 yOverlap2 = { 0.0f ,box1->GetBL().y - box2->GetTR().y };
+		
+
+		float lowestDist = abs(xOverlap1.x);
+		glm::vec2 lowestVec = xOverlap1;
+
+
+
+		if (abs(xOverlap2.x) < lowestDist)
 		{
-			collisionOverlap = overlap1;
-		}
-		else
-		{
-			collisionOverlap = overlap2;
+			lowestDist = abs(xOverlap2.x);
+			lowestVec = xOverlap2;
 		}
 
+		if (abs(yOverlap1.y) < lowestDist)
+		{
+			lowestDist = abs(yOverlap1.y);
+			lowestVec = yOverlap1;
+		}
+
+		if (abs(yOverlap2.y) < lowestDist)
+		{
+			lowestDist = abs(yOverlap2.y);
+			lowestVec = yOverlap2;
+		}
+
+
+		colldata.normal = glm::normalize(lowestVec);
+		colldata.overlap = lowestDist;
+
+
+
+
+		
+		return colldata;
 
 
 
@@ -325,11 +356,10 @@ PhysicsScene::CollisionData PhysicsScene::Box2Box(PhysicsObject * object1, Physi
 		//colldata.overlap = offsetFaceDis;
 
 
-		return colldata;
+	
 
 	}
 }
-
 
 void PhysicsScene::handleCollision(PhysicsObject * object1, PhysicsObject * object2, const CollisionData & collData)
 {
@@ -401,7 +431,6 @@ void PhysicsScene::SeperateCollisionObjects(RigidBody * rb1, RigidBody * rb2, co
 		rb2->SetPos(rb2->getPos() + (obj2MoveRatio * collData.overlap * collData.normal));
 	}
 }
-
 
 void PhysicsScene::addActor(PhysicsObject * actor)
 {
