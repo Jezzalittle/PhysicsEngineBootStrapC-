@@ -27,6 +27,7 @@ protected:
 	std::unique_ptr<PhysicsScene>		ballThrowScene;
 	std::unique_ptr<PhysicsScene>		ballDropScene;
 	std::unique_ptr<PhysicsScene>		collisionScene;
+	std::unique_ptr<PhysicsScene>		convexScene;
 	std::shared_ptr<SceneManager>		sceneManager;
 
 

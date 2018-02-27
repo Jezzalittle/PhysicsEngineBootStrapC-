@@ -46,7 +46,7 @@ public:
 
 	void addActor(PhysicsObject* actor);
 	void removeActor(PhysicsObject* actor);
-	void update(float dt);
+	virtual void update(float dt);
 	void updateGizmos();
 
 	virtual void Start() = 0;

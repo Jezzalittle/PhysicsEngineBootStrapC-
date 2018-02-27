@@ -10,6 +10,7 @@
 #include "BallDropScene.h"
 #include "BallThrowScene.h"
 #include "CollisionTestScene.h"
+#include "ConvexShapesScene.h"
 
 PhysicsEngineApp::PhysicsEngineApp() {
 
@@ -35,6 +36,7 @@ bool PhysicsEngineApp::startup() {
 	ballDropScene = std::make_unique<BallDropScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
 	ballThrowScene = std::make_unique<BallThrowScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
 	collisionScene = std::make_unique<CollisionTestScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
+	convexScene = std::make_unique<ConvexShapesScene>(sceneManager, 0.005f, glm::vec2{ 0, -9.8f });
 
 	return true;
 }
