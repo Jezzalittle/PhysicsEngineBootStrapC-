@@ -20,10 +20,6 @@ class PhysicsObject
 
 public:
 
-
-
-
-
 	~PhysicsObject();
 	PhysicsObject() = delete;
 

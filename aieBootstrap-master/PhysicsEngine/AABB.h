@@ -46,7 +46,6 @@ public:
 		return br;
 	}
 	
-
 	float getWidth() { return extents.x; }
 	float getHeight() { return extents.y; }
 

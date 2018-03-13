@@ -26,11 +26,8 @@ public:
 	void CheckForCollision();
 
 	static CollisionData Plane2Sphere(PhysicsObject* object1, PhysicsObject*object2);
-
 	static CollisionData Sphere2Plane(PhysicsObject* object1, PhysicsObject* object2);
-
 	static CollisionData Sphere2Sphere(PhysicsObject* object1, PhysicsObject* object2);
-
 	static CollisionData Sphere2Box(PhysicsObject* object1, PhysicsObject* object2);
 	static CollisionData Box2Plane(PhysicsObject* object1, PhysicsObject* object2);
 	static CollisionData Box2Sphere(PhysicsObject* object1, PhysicsObject* object2);
